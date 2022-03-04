@@ -18,9 +18,9 @@ async def 출석체크(ctx):
             channel = ctx.author.voice.channel
             members = ', '.join([x.name for x in channel.members])
             if len(channel.members) == 0:
-                await ctx.send(f'**{channel.name} 채널 출석자 명단**\n- 없음')
+                await ctx.send(f'**출석자 명단**\n- 없음')
             else:
-                await ctx.send(f'**{channel.name} 채널 출석자 명단** ({len(channel.members)}명)\n>>> {members}')
+                await ctx.send(f'**출석자 명단** ({len(channel.members)}명)\n>>> {members}')
     except:
             await ctx.send('오류가 발생했습니다. :disappointed_relieved:')
 
