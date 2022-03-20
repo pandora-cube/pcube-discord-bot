@@ -1,5 +1,4 @@
 from discord.ext import commands
-from notion import NotionDatabase
 from members import Members
 
 class PACheck(commands.Cog):
