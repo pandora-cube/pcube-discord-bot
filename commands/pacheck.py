@@ -22,7 +22,7 @@ class PACheck(commands.Cog):
     
     @commands.command(name='출석체크')
     async def pacheck(self, ctx, part=None):
-        #try:
+        try:
             if ctx.author.voice is None:
                 await ctx.send('음성채널에 접속한 후 사용해 주세요. :grinning:')
                 return
@@ -86,9 +86,9 @@ class PACheck(commands.Cog):
             for member in all_members:
                 attended = not_attended = '　'
                 if member['name'] in attended_members:
-                    attended = 'O'
+                    attended = '○'
                 else:
-                    not_attended = 'O'
+                    not_attended = '○'
                 
                 etc = ''
                 if member['grade'] >= 4:
@@ -100,7 +100,7 @@ class PACheck(commands.Cog):
                 row += textwrap(attended, 2) + '　|　'
                 row += textwrap(not_attended, 2) + '　|　'
                 row += etc + '\n'
-            
+                
                 if len(result+row) >= 2000:
                     await ctx.send(result)
                     result = row
@@ -110,8 +110,9 @@ class PACheck(commands.Cog):
             if len(result) > 0:
                 await ctx.send(result)
             await ctx.send(f'{part_text}출석체크 완료')
-        #except:
-            #await ctx.send('오류가 발생했습니다. :disappointed_relieved:')
+        except Exception as e:
+            print(e)
+            await ctx.send('오류가 발생했습니다. :disappointed_relieved:')
 
 def setup(client):
     client.add_cog(PACheck(client))
