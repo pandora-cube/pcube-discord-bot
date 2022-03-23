@@ -1,4 +1,5 @@
 from notion import NotionDatabase
+import re
 
 class Members():
     @classmethod
@@ -35,5 +36,16 @@ class Members():
     @classmethod
     def get_attendees(self, ctx):
         channel = ctx.author.voice.channel
-        attendees = [x.name for x in channel.members]
+        attendees = [self.parse_name(x.nick) for x in channel.members]
         return attendees
+    
+    def parse_name(nickname):
+        regex = re.compile('[\[|\(|\<](.*?)[\]|\)|\>]')
+        search = regex.search(nickname)
+
+        if search is not None:
+            name = search.group()[1:-1]
+        else:
+            name = nickname
+
+        return name

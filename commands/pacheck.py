@@ -35,6 +35,7 @@ class PACheck(commands.Cog):
 
             # 출석자 명단
             attendees = Members.get_attendees(ctx)
+            ex_attendees = [x for x in attendees if x not in [y['name'] for y in targets]]
 
             # 출력
             part_text = ''
@@ -46,7 +47,7 @@ class PACheck(commands.Cog):
                 await ctx.send(row)
                 return
             
-            row = f'**{part_text}출석자 명단**\n'
+            row = f'**{part_text}출석자 명단** ({len(attendees)}명)\n'
             row += textwrap('회원구분', 4) + '　|　'
             row += textwrap('이름', 4) + '　|　'
             row += textwrap('참석', 2) + '　|　'
@@ -54,7 +55,7 @@ class PACheck(commands.Cog):
             row += '비고'
             await ctx.send(row)
 
-            result = ''
+            buffer = ''
             for member in targets:
                 attended = not_attended = '　'
                 if member['name'] in attendees:
@@ -73,14 +74,20 @@ class PACheck(commands.Cog):
                 row += textwrap(not_attended, 2) + '　|　'
                 row += etc + '\n'
                 
-                if len(result+row) >= 2000:
-                    await ctx.send(result)
-                    result = row
+                if len(buffer+row) >= 2000:
+                    await ctx.send(buffer)
+                    buffer = row
                 else:
-                    result += row
+                    buffer += row
             
-            if len(result) > 0:
-                await ctx.send(result)
+            if len(buffer) > 0:
+                await ctx.send(buffer)
+            
+            if len(ex_attendees) > 0:
+                buffer = f'기타 출석자: '
+                buffer += ', '.join(ex_attendees)
+                await ctx.send(buffer)
+            
             await ctx.send(f'{part_text}출석체크 완료')
         except Exception as e:
             print(e)
