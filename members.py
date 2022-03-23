@@ -36,7 +36,7 @@ class Members():
     @classmethod
     def get_attendees(self, ctx):
         channel = ctx.author.voice.channel
-        attendees = [self.parse_name(x.nick) for x in channel.members]
+        attendees = [self.parse_name(x.nick or x.name) for x in channel.members]
         return attendees
     
     def parse_name(nickname):
