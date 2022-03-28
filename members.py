@@ -13,10 +13,10 @@ class Members():
             {
                 'name': member['properties']['이름']['title'][0]['plain_text'],
                 'rank': member['properties']['분류']['select']['name'],
-                'grade': member['properties']['학년']['number']
+                'grade': member['properties']['학년']['number'],
+                'reason': member['properties']['정기적불참사유']['rich_text'][0]['plain_text']
             }
             for member in db.data
-            if member['properties']['분류']['select']['name'] in target_ranks
         ]
         targets = sorted(targets, key=lambda x: (x['rank'], x['name']))
 
@@ -25,7 +25,24 @@ class Members():
     @classmethod
     def get_seminar_targets(self, part=None):
         target_ranks = ['정회원', '수습회원']
-        filter = self.filter(rank=target_ranks, part=part, seminar=True)
+        filter = self.filter(ranks=target_ranks, part=part, seminar=True)
+
+        db = NotionDatabase(NOTION_DB['MEMBER_LIST'], filter)
+        targets = [
+            {
+                'name': member['properties']['이름']['title'][0]['plain_text'],
+                'rank': member['properties']['분류']['select']['name'],
+                'recent': self.parse_date(member['properties']['최근 세미나 일자']['date']),
+            }
+            for member in db.data
+            if not (
+                member['properties']['분류']['select']['name'] == '정회원'
+                and member['properties']['학년']['number'] >= 4
+            )
+        ]
+        targets = sorted(targets, key=lambda x: (x['recent'], x['name']))
+
+        return targets
 
     @classmethod
     def get_attendees(self, ctx):
@@ -63,7 +80,7 @@ class Members():
             filter_seminar = {
                 'property': '정기적불참사유',
                 'rich_text': {
-                    'is_not_empty': True
+                    'is_empty': True
                 }
             }
         
@@ -85,3 +102,12 @@ class Members():
             name = nickname
 
         return name
+    
+    def parse_date(date):
+        if not date:
+            return '없음'
+        elif date['end']:
+            return date['end']
+        elif date['start']:
+            return date['start']
+        return '없음'
