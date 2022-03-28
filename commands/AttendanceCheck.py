@@ -1,11 +1,11 @@
 from discord.ext import commands
 from members import Members
 
-class PACheck(commands.Cog):
+class AttendanceCheck(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.command(name='출석체크(구)')
+    '''@commands.command(name='출석체크(구)')
     async def pacheck_old(self, ctx):
         try:
             if ctx.author.voice is None:
@@ -18,7 +18,7 @@ class PACheck(commands.Cog):
                 else:
                     await ctx.send(f'**출석자 명단** ({len(channel.members)}명)\n>>> {members}')
         except:
-            await ctx.send('오류가 발생했습니다. :disappointed_relieved:')
+            await ctx.send('오류가 발생했습니다. :disappointed_relieved:')'''
     
     @commands.command(name='출석체크')
     async def pacheck(self, ctx, part=None):
@@ -94,8 +94,8 @@ class PACheck(commands.Cog):
             await ctx.send('오류가 발생했습니다. :disappointed_relieved:')
 
 def setup(client):
-    client.add_cog(PACheck(client))
-    print('명령어 클래스 로드: PACheck')
+    client.add_cog(AttendanceCheck(client))
+    print('명령어 클래스 로드: AttendanceCheck')
 
 def textwrap(text, width):
     result = text

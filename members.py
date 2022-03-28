@@ -6,19 +6,7 @@ class Members():
     @classmethod
     def get_attendance_targets(self, part=None):
         target_ranks = ['정회원', '수습회원']
-        filter = {'or': [{'property': '분류', 'select': {'equals': rank}} for rank in target_ranks]}
-        if part is not None:
-            filter = {
-                'and': [
-                    {
-                        'property': '파트',
-                        'select': {
-                            'equals': part
-                        }
-                    },
-                    { 'or': filter['or'] }
-                ]
-            }
+        filter = self.filter(ranks=target_ranks, part=part)
 
         db = NotionDatabase(NOTION_DB['MEMBER_LIST'], filter)
         targets = [
@@ -35,11 +23,58 @@ class Members():
         return targets
     
     @classmethod
+    def get_seminar_targets(self, part=None):
+        target_ranks = ['정회원', '수습회원']
+        filter = self.filter(rank=target_ranks, part=part, seminar=True)
+
+    @classmethod
     def get_attendees(self, ctx):
         channel = ctx.author.voice.channel
         attendees = [self.parse_name(x.nick or x.name) for x in channel.members]
         return attendees
     
+    def filter(ranks=None, part=None, seminar=None):
+        # 기본값, 모든 항목에 해당하는 조건
+        filter_default = { 'property': '이름', 'rich_text': { 'is_not_empty': True } }
+        filter_rank = filter_default.copy()
+        filter_part = filter_default.copy()
+        filter_seminar = filter_default.copy()
+
+        # 분류
+        if ranks is not None:
+            filter_rank = {
+                'or': [
+                    {'property': '분류', 'select': {'equals': rank}}
+                    for rank in ranks
+                ]
+            }
+        
+        # 파트
+        if part is not None:
+            filter_part = {
+                'property': '파트',
+                'select': {
+                    'equals': part
+                }
+            }
+
+        # 정기적불참사유
+        if seminar:
+            filter_seminar = {
+                'property': '정기적불참사유',
+                'rich_text': {
+                    'is_not_empty': True
+                }
+            }
+        
+        return {
+            'and': [
+                filter_rank,
+                filter_part,
+                filter_seminar,
+            ]
+        }
+
     def parse_name(nickname):
         regex = re.compile('[\[|\(|\<](.*?)[\]|\)|\>]')
         search = regex.search(nickname)
