@@ -1,1 +1,5 @@
 VERSION = '0.2.2'
+
+NOTION_DB = {
+    'MEMBER_LIST': '920603e8762a4daebe53ff72e9e8a83e',
+}

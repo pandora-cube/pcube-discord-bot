@@ -1,5 +1,6 @@
 from notion import NotionDatabase
 import re
+from config import NOTION_DB
 
 class Members():
     @classmethod
@@ -19,7 +20,7 @@ class Members():
                 ]
             }
 
-        db = NotionDatabase('920603e8762a4daebe53ff72e9e8a83e', filter)
+        db = NotionDatabase(NOTION_DB['MEMBER_LIST'], filter)
         targets = [
             {
                 'name': member['properties']['이름']['title'][0]['plain_text'],
