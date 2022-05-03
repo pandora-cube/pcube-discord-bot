@@ -14,7 +14,7 @@ class Members():
                 'name': member['properties']['이름']['title'][0]['plain_text'],
                 'rank': member['properties']['분류']['select']['name'],
                 'grade': member['properties']['학년']['number'],
-                'reason': member['properties']['정기적불참사유']['rich_text'][0]['plain_text']
+                'reason': self.parse_absent_reason(member['properties']['정기적불참사유']['rich_text'])
             }
             for member in db.data
         ]
@@ -111,3 +111,8 @@ class Members():
         elif date['start']:
             return date['start']
         return '없음'
+
+    def parse_absent_reason(data):
+        if len(data) > 0 and 'plain_text' in data[0]:
+            return data[0]['plain_text']
+        return ''

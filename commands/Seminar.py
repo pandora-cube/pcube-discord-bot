@@ -9,6 +9,9 @@ class Seminar(commands.Cog):
     
     @commands.command(name='세미나')
     async def seminar(self, ctx, part=None, number=None):
+        await ctx.send('아직 사용할 수 없는 기능입니다.')
+        return
+
         try:
             if ctx.author.voice is None:
                 await ctx.send('음성채널에 접속한 후 사용해 주세요. :grinning:')
