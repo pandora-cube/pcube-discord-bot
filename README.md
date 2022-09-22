@@ -31,8 +31,8 @@ It requires the API keys of Discord and Notion to run. For more information on u
 | Command | Description |
 |-|-|
 | `!help` | Print a list of the commands with descriptions. |
-| `!출석체크` | Check attendance for all Pandora Cube members. It will be run on the voice channel that the user is currently connected to. |
-| `!출석체크 [파트]` | Check attendance for specific part members. The rest are the same as above. |
+| `!출석체크` | Check attendance for all members. It will be run on the voice channel that the user is currently connected to. |
+| `!출석체크 [PART NAME]` | Check attendance for specific part members. The rest are the same as above. |
 
 ## How to use
 
