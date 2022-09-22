@@ -22,7 +22,7 @@
 
 # Pandora Cube Discord Bot
 
-This Discord bot was developed to support the non-face-to-face activities of Pandora Cube.
+This Discord bot was developed to support the untact activities of Pandora Cube.
 
 It requires the API keys of Discord and Notion to run. For more information on usage, see [how to use](#how-to-use).
 
